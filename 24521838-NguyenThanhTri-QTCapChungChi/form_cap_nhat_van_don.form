@@ -1,0 +1,33 @@
+{
+  "components": [
+    {
+      "label": "Mã vận đơn (Tracking Number)",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_101qu6l",
+        "columns": null
+      },
+      "id": "Field_0ovhg96",
+      "key": "maVanDon"
+    },
+    {
+      "label": "Ghi chú giao hàng",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0an9533",
+        "columns": null
+      },
+      "id": "Field_0iadfca",
+      "key": "ghiChu"
+    }
+  ],
+  "type": "default",
+  "id": "Form_CapNhatVanDon",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.45.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

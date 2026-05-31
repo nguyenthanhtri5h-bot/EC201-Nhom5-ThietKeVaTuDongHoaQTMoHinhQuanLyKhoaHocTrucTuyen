@@ -1,0 +1,90 @@
+{
+  "components": [
+    {
+      "label": "Họ và tên",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_130yhsk",
+        "columns": null
+      },
+      "id": "Field_0c303ir",
+      "key": "hoTen"
+    },
+    {
+      "label": "Mã học viên",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0qggcb1",
+        "columns": null
+      },
+      "id": "Field_12u0v1a",
+      "key": "maHocVien"
+    },
+    {
+      "label": "Email cá nhân",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0qggcb1",
+        "columns": null
+      },
+      "id": "Field_0a72m3p",
+      "key": "email"
+    },
+    {
+      "label": "Tiến độ học tập (%)",
+      "type": "number",
+      "layout": {
+        "row": "Row_1xsf6hk",
+        "columns": null
+      },
+      "id": "Field_1mvi56w",
+      "key": "tienDo",
+      "validate": {
+        "min": "0",
+        "max": "100"
+      }
+    },
+    {
+      "label": "Hình thức nhận chứng chỉ",
+      "values": [
+        {
+          "label": "Bản mềm (PDF) qua Email",
+          "value": "ban_mem"
+        },
+        {
+          "label": "Bản cứng qua bưu điện",
+          "value": "ban_cung"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_069g81y",
+        "columns": null
+      },
+      "id": "Field_0g8qa9t",
+      "key": "hinhThucNhan"
+    },
+    {
+      "label": "Địa chỉ nhận bản cứng",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0ert4wf",
+        "columns": null
+      },
+      "id": "Field_1cgufme",
+      "key": "diaChi",
+      "conditional": {
+        "hide": "=hinhThucNhan != \"ban_cung\""
+      }
+    }
+  ],
+  "type": "default",
+  "id": "Form_DienThongTin",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.45.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

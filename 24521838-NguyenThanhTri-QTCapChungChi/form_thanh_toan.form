@@ -1,0 +1,47 @@
+{
+  "components": [
+    {
+      "label": "Số tiền cần thanh toán (VNĐ)",
+      "type": "number",
+      "layout": {
+        "row": "Row_1xauz7y",
+        "columns": null
+      },
+      "id": "Field_1kmn0cs",
+      "key": "soTien",
+      "readonly": true,
+      "disabled": false
+    },
+    {
+      "text": "Vui lòng chuyển khoản vào STK: 123456789 - Ngân hàng ABC. Nội dung: [Mã học viên] - Cap chung chi\".",
+      "type": "text",
+      "layout": {
+        "row": "Row_00s3ycv",
+        "columns": null
+      },
+      "id": "Field_00lgfy8"
+    },
+    {
+      "label": "Mã giao dịch ngân hàng",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1lixxon",
+        "columns": null
+      },
+      "id": "Field_1bep25i",
+      "key": "maGiaoDich",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "Form_ThanhToan",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.45.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}
