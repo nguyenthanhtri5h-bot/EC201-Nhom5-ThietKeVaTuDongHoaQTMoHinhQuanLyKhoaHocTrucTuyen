@@ -1,0 +1,33 @@
+{
+  "components": [
+    {
+      "label": "Chọn bộ phận xử lý",
+      "values": [
+        {
+          "label": "Bộ phận IT",
+          "value": "ky_thuat"
+        },
+        {
+          "label": "Giảng viên",
+          "value": "chuyen_mon"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_0k0c2h7",
+        "columns": null
+      },
+      "id": "Field_1a1jyvt",
+      "key": "loai_yeu_cau"
+    }
+  ],
+  "type": "default",
+  "id": "Form_PhanLoai",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}
