@@ -1,0 +1,23 @@
+{
+  "components": [
+    {
+      "label": "Xử lý",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_08zid7z",
+        "columns": null
+      },
+      "id": "Field_0d6nrnf",
+      "key": "textarea_pagafa"
+    }
+  ],
+  "type": "default",
+  "id": "Form_XacNhanLam",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

@@ -1,0 +1,33 @@
+{
+  "components": [
+    {
+      "label": "Mức độ nghiêm trọng",
+      "values": [
+        {
+          "label": "Nghiêm trọng",
+          "value": "high"
+        },
+        {
+          "label": "Bình thường",
+          "value": "low"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_187zggt",
+        "columns": null
+      },
+      "id": "Field_00qqjyz",
+      "key": "severity"
+    }
+  ],
+  "type": "default",
+  "id": "Form_KiemTraLoi",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}
