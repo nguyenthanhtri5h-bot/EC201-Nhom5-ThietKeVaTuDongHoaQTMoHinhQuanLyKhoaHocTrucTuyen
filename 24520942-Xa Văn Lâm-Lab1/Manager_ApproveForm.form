@@ -1,0 +1,92 @@
+{
+  "components": [
+    {
+      "label": "Học viên",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1l6v2v5",
+        "columns": null
+      },
+      "id": "Field_0qyvscq",
+      "key": "studentName",
+      "disabled": true
+    },
+    {
+      "label": "Email nhận thông báo",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0vwalxi",
+        "columns": null
+      },
+      "id": "Field_0r46zcj",
+      "key": "studentEmail",
+      "disabled": true,
+      "validate": {
+        "required": true,
+        "validationType": "email"
+      }
+    },
+    {
+      "label": "Số tiền gốc",
+      "type": "number",
+      "layout": {
+        "row": "Row_0vwalxi",
+        "columns": null
+      },
+      "id": "Field_0a2sq3b",
+      "key": "amount",
+      "disabled": true
+    },
+    {
+      "label": "SỐ TIỀN THỰC HOÀN (Đã trừ phí 10%)",
+      "type": "number",
+      "layout": {
+        "row": "Row_06x2hoo",
+        "columns": null
+      },
+      "id": "Field_04jjflk",
+      "key": "realRefund",
+      "disabled": true
+    },
+    {
+      "label": "Quyết định của Quản lý Tài chính",
+      "values": [
+        {
+          "label": "Phê duyệt chi tiền",
+          "value": true
+        },
+        {
+          "label": "Không đồng ý chi",
+          "value": false
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0urbw2b",
+        "columns": null
+      },
+      "id": "Field_05x6yjy",
+      "key": "isManagerApproved"
+    },
+    {
+      "label": "Ý kiến của CSKH",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0vxvppa",
+        "columns": null
+      },
+      "id": "Field_0086hzw",
+      "key": "cskhNote",
+      "disabled": true
+    }
+  ],
+  "type": "default",
+  "id": "Manager_ApproveForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}
