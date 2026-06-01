@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1s966zr" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.45.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+  <bpmn:collaboration id="Collaboration_1d71rkt">
+    <bpmn:extensionElements />
+    <bpmn:participant id="Participant_0vo9n8l" name="Educational Platform" processRef="Process_0q3q9g8" />
+    <bpmn:participant id="Participant_0dcs0lt" name="Học viên" />
+    <bpmn:messageFlow id="Flow_0nw80jc" sourceRef="Participant_0dcs0lt" targetRef="SubmitEnrollmentInfo" />
+    <bpmn:messageFlow id="Flow_19rkags" sourceRef="SubmitEnrollmentInfo" targetRef="Participant_0dcs0lt" />
+    <bpmn:messageFlow id="Flow_0j5ajf2" sourceRef="Participant_0dcs0lt" targetRef="StartEvent_ChooseCourse" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_0q3q9g8" name="QT02-Quy trình ghi danh và thanh toán" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:laneSet id="LaneSet_1c8in6r">
+      <bpmn:lane id="Lane_068dcyn" name="System Worker">
+        <bpmn:flowNodeRef>EndEvent_EnrollmentSuccess</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GrantAccess</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CheckCondition</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>InitPayment</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_0d7wgrw" name="Hệ thống LMS">
+        <bpmn:flowNodeRef>EndEvent_PaymentExpired</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>IsPaidCourse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>IsPaymentSuccessful</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_OrderCancelled</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubmitEnrollmentInfo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_ChooseCourse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NotifyExpiration</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>NotifyFailure</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>WaitForPayment</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>TimerEvent_PaymentTimeout</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:endEvent id="EndEvent_PaymentExpired" name="Quá trình thanh toán hết hạn">
+      <bpmn:incoming>Flow_04twwtc</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="IsPaidCourse" name="Khóa học có phí?">
+      <bpmn:incoming>Flow_1leace2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kkzy9y</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0w6naz0</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="IsPaymentSuccessful" name="Thanh toán thành công?">
+      <bpmn:incoming>Flow_04smonv</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tr8364</bpmn:outgoing>
+      <bpmn:outgoing>Flow_15s7mkg</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="EndEvent_OrderCancelled" name="Đơn hàng bị hủy">
+      <bpmn:incoming>Flow_1s8pxms</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_EnrollmentSuccess" name="Ghi danh thành công">
+      <bpmn:incoming>Flow_034p2zs</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="GrantAccess" name="Cấp quyền truy cập khóa học" camunda:type="external" camunda:topic="grant-access">
+      <bpmn:incoming>Flow_0tr8364</bpmn:incoming>
+      <bpmn:incoming>Flow_0w6naz0</bpmn:incoming>
+      <bpmn:outgoing>Flow_034p2zs</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="CheckCondition" name="Xác thực ban đầu" camunda:type="external" camunda:topic="check-condition">
+      <bpmn:incoming>Flow_0hi031m</bpmn:incoming>
+      <bpmn:outgoing>Flow_1leace2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="InitPayment" name="Khởi tạo thanh toán" camunda:type="external" camunda:topic="init-payment">
+      <bpmn:incoming>Flow_0kkzy9y</bpmn:incoming>
+      <bpmn:outgoing>Flow_14msv9g</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="SubmitEnrollmentInfo" name="Cung cấp thông tin ghi danh" camunda:formRef="form_ghi_danh" camunda:formRefBinding="latest">
+      <bpmn:incoming>Flow_0ddaqb1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0hi031m</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:startEvent id="StartEvent_ChooseCourse" name="Học viên chọn khóa học">
+      <bpmn:outgoing>Flow_0ddaqb1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:manualTask id="NotifyExpiration" name="Thông báo hết hạn">
+      <bpmn:incoming>Flow_16wf81h</bpmn:incoming>
+      <bpmn:outgoing>Flow_04twwtc</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="NotifyFailure" name="Thông báo lỗi/bị hủy">
+      <bpmn:incoming>Flow_15s7mkg</bpmn:incoming>
+      <bpmn:outgoing>Flow_1s8pxms</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:sequenceFlow id="Flow_04twwtc" sourceRef="NotifyExpiration" targetRef="EndEvent_PaymentExpired" />
+    <bpmn:sequenceFlow id="Flow_1leace2" sourceRef="CheckCondition" targetRef="IsPaidCourse" />
+    <bpmn:sequenceFlow id="Flow_0kkzy9y" name="Có" sourceRef="IsPaidCourse" targetRef="InitPayment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${co_phi == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0w6naz0" name="Không" sourceRef="IsPaidCourse" targetRef="GrantAccess">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${co_phi == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_14msv9g" sourceRef="InitPayment" targetRef="WaitForPayment" />
+    <bpmn:sequenceFlow id="Flow_16wf81h" name="Hết hạn OTP/QR" sourceRef="WaitForPayment" targetRef="NotifyExpiration" />
+    <bpmn:sequenceFlow id="Flow_04smonv" sourceRef="WaitForPayment" targetRef="IsPaymentSuccessful" />
+    <bpmn:sequenceFlow id="Flow_0tr8364" name="Thành công" sourceRef="IsPaymentSuccessful" targetRef="GrantAccess">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${thanh_toan == true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_15s7mkg" name="Không thành công" sourceRef="IsPaymentSuccessful" targetRef="NotifyFailure">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${thanh_toan == false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1s8pxms" sourceRef="NotifyFailure" targetRef="EndEvent_OrderCancelled" />
+    <bpmn:sequenceFlow id="Flow_034p2zs" sourceRef="GrantAccess" targetRef="EndEvent_EnrollmentSuccess" />
+    <bpmn:sequenceFlow id="Flow_0hi031m" sourceRef="SubmitEnrollmentInfo" targetRef="CheckCondition" />
+    <bpmn:sequenceFlow id="Flow_0ddaqb1" sourceRef="StartEvent_ChooseCourse" targetRef="SubmitEnrollmentInfo" />
+    <bpmn:userTask id="WaitForPayment" name="Đợi phản hồi">
+      <bpmn:incoming>Flow_14msv9g</bpmn:incoming>
+      <bpmn:outgoing>Flow_16wf81h</bpmn:outgoing>
+      <bpmn:outgoing>Flow_04smonv</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:boundaryEvent id="TimerEvent_PaymentTimeout" attachedToRef="WaitForPayment">
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0a6mhmw">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1d71rkt">
+      <bpmndi:BPMNShape id="Participant_0vo9n8l_di" bpmnElement="Participant_0vo9n8l" isHorizontal="true">
+        <dc:Bounds x="160" y="260" width="1330" height="390" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0d7wgrw_di" bpmnElement="Lane_0d7wgrw" isHorizontal="true">
+        <dc:Bounds x="190" y="260" width="1300" height="230" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_068dcyn_di" bpmnElement="Lane_068dcyn" isHorizontal="true">
+        <dc:Bounds x="190" y="490" width="1300" height="160" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1v3iw44_di" bpmnElement="EndEvent_PaymentExpired">
+        <dc:Bounds x="1092" y="302" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1072" y="345" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1cvqq1h_di" bpmnElement="IsPaidCourse" isMarkerVisible="true">
+        <dc:Bounds x="505" y="395" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="487" y="371" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_06ypymk_di" bpmnElement="IsPaymentSuccessful" isMarkerVisible="true">
+        <dc:Bounds x="935" y="395" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="946" y="376" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ozeyyr_di" bpmnElement="EndEvent_OrderCancelled">
+        <dc:Bounds x="1392" y="402" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1369" y="445" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_17gph3c_di" bpmnElement="EndEvent_EnrollmentSuccess">
+        <dc:Bounds x="1242" y="572" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1222" y="615" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05lqcyv_di" bpmnElement="GrantAccess">
+        <dc:Bounds x="1030" y="550" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qalxeg_di" bpmnElement="CheckCondition">
+        <dc:Bounds x="350" y="510" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ck96iu_di" bpmnElement="InitPayment">
+        <dc:Bounds x="610" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1t0ngin_di" bpmnElement="SubmitEnrollmentInfo">
+        <dc:Bounds x="330" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_ChooseCourse">
+        <dc:Bounds x="262" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="245" y="375" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09l6nlr_di" bpmnElement="NotifyExpiration">
+        <dc:Bounds x="930" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ac4kul_di" bpmnElement="NotifyFailure">
+        <dc:Bounds x="1190" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0y7wat6_di" bpmnElement="WaitForPayment">
+        <dc:Bounds x="770" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07kk4td_di" bpmnElement="TimerEvent_PaymentTimeout">
+        <dc:Bounds x="802" y="362" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_04twwtc_di" bpmnElement="Flow_04twwtc">
+        <di:waypoint x="1030" y="320" />
+        <di:waypoint x="1092" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1leace2_di" bpmnElement="Flow_1leace2">
+        <di:waypoint x="400" y="510" />
+        <di:waypoint x="400" y="420" />
+        <di:waypoint x="505" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kkzy9y_di" bpmnElement="Flow_0kkzy9y">
+        <di:waypoint x="555" y="420" />
+        <di:waypoint x="660" y="420" />
+        <di:waypoint x="660" y="510" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="601" y="402" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w6naz0_di" bpmnElement="Flow_0w6naz0">
+        <di:waypoint x="530" y="445" />
+        <di:waypoint x="530" y="610" />
+        <di:waypoint x="1030" y="610" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="544" y="533" width="32" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14msv9g_di" bpmnElement="Flow_14msv9g">
+        <di:waypoint x="710" y="550" />
+        <di:waypoint x="740" y="550" />
+        <di:waypoint x="740" y="420" />
+        <di:waypoint x="770" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16wf81h_di" bpmnElement="Flow_16wf81h">
+        <di:waypoint x="820" y="380" />
+        <di:waypoint x="820" y="320" />
+        <di:waypoint x="930" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="817" y="303" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04smonv_di" bpmnElement="Flow_04smonv">
+        <di:waypoint x="870" y="420" />
+        <di:waypoint x="935" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tr8364_di" bpmnElement="Flow_0tr8364">
+        <di:waypoint x="960" y="445" />
+        <di:waypoint x="960" y="590" />
+        <di:waypoint x="1030" y="590" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="960" y="503" width="59" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15s7mkg_di" bpmnElement="Flow_15s7mkg">
+        <di:waypoint x="985" y="420" />
+        <di:waypoint x="1190" y="420" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1043" y="423" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1s8pxms_di" bpmnElement="Flow_1s8pxms">
+        <di:waypoint x="1290" y="420" />
+        <di:waypoint x="1392" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_034p2zs_di" bpmnElement="Flow_034p2zs">
+        <di:waypoint x="1130" y="590" />
+        <di:waypoint x="1242" y="590" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hi031m_di" bpmnElement="Flow_0hi031m">
+        <di:waypoint x="380" y="390" />
+        <di:waypoint x="380" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ddaqb1_di" bpmnElement="Flow_0ddaqb1">
+        <di:waypoint x="298" y="350" />
+        <di:waypoint x="330" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_0npfzci_di" bpmnElement="Participant_0dcs0lt" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1330" height="110" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0nw80jc_di" bpmnElement="Flow_0nw80jc">
+        <di:waypoint x="400" y="190" />
+        <di:waypoint x="400" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19rkags_di" bpmnElement="Flow_19rkags">
+        <di:waypoint x="370" y="310" />
+        <di:waypoint x="370" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0j5ajf2_di" bpmnElement="Flow_0j5ajf2">
+        <di:waypoint x="280" y="190" />
+        <di:waypoint x="280" y="332" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

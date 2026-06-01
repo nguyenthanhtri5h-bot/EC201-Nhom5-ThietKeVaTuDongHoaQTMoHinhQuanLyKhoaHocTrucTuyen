@@ -1,0 +1,65 @@
+{
+  "components": [
+    {
+      "label": "Họ và tên",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0pkhprg",
+        "columns": null
+      },
+      "id": "Field_10xd19k",
+      "key": "ho_ten"
+    },
+    {
+      "label": "Email",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_061vhxf",
+        "columns": null
+      },
+      "id": "Field_107tlnq",
+      "key": "email"
+    },
+    {
+      "label": "Loại khóa",
+      "values": [
+        {
+          "label": "Có phí",
+          "value": "paid"
+        },
+        {
+          "label": "Miễn phí",
+          "value": "free"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_1l3zqr8",
+        "columns": null
+      },
+      "id": "Field_02xwvgv",
+      "key": "loai_khoa",
+      "searchable": false,
+      "disabled": false
+    },
+    {
+      "label": "Mục tiêu học khóa học này của bạn là gì?",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1y7vir7",
+        "columns": null
+      },
+      "id": "Field_0k2uzrr",
+      "key": "muc_tieu_hoc"
+    }
+  ],
+  "type": "default",
+  "id": "form_ghi_danh",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.45.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}
