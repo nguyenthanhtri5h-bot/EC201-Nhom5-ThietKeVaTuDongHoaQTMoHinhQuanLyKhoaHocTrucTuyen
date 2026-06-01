@@ -1,0 +1,43 @@
+{
+  "components": [
+    {
+      "label": "Mã đối soát",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_143ajjj",
+        "columns": null
+      },
+      "id": "Field_1hd3vzv",
+      "key": "reconciliationId"
+    },
+    {
+      "label": "Lý do từ chối",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1tynhla",
+        "columns": null
+      },
+      "id": "Field_0hyb3x6",
+      "key": "reasonForRejectionreasonForRejection"
+    },
+    {
+      "label": "Số tiền yêu cầu",
+      "type": "number",
+      "layout": {
+        "row": "Row_0ot9cfp",
+        "columns": null
+      },
+      "id": "Field_13bf7xx",
+      "key": "expectedAmount"
+    }
+  ],
+  "type": "default",
+  "id": "Form_0r5zze9",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

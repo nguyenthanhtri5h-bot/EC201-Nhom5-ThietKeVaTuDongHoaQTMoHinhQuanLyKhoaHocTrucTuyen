@@ -1,0 +1,73 @@
+{
+  "components": [
+    {
+      "label": "Mã giảng viên",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_087rit1",
+        "columns": null
+      },
+      "id": "Field_1rg40tp",
+      "key": "lecturerId"
+    },
+    {
+      "label": "Tên giảng viên",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1l56z0g",
+        "columns": null
+      },
+      "id": "Field_0eifzrf",
+      "key": "lecturerName"
+    },
+    {
+      "label": "Số khóa học",
+      "type": "number",
+      "layout": {
+        "row": "Row_1mhcgj3",
+        "columns": null
+      },
+      "id": "Field_158nskp",
+      "key": "totalCourses"
+    },
+    {
+      "label": "Tổng học viên",
+      "type": "number",
+      "layout": {
+        "row": "Row_0k53oof",
+        "columns": null
+      },
+      "id": "Field_0ioozkq",
+      "key": "totalStudents"
+    },
+    {
+      "label": "Doanh thu",
+      "type": "number",
+      "layout": {
+        "row": "Row_098v3gx",
+        "columns": null
+      },
+      "id": "Field_08md368",
+      "key": "revenue"
+    },
+    {
+      "label": "Hoa hồng (%)",
+      "type": "number",
+      "layout": {
+        "row": "Row_1tmd71b",
+        "columns": null
+      },
+      "id": "Field_1ps7n6s",
+      "key": "commission"
+    }
+  ],
+  "type": "default",
+  "id": "DoiSoat",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

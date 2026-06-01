@@ -1,0 +1,53 @@
+{
+  "components": [
+    {
+      "label": "Tên giảng viên",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0v0me13",
+        "columns": null
+      },
+      "id": "Field_09sdk0v",
+      "key": "lecturerName"
+    },
+    {
+      "label": "Số tiền nhận",
+      "type": "number",
+      "layout": {
+        "row": "Row_00ey95o",
+        "columns": null
+      },
+      "id": "Field_0s6dxzw",
+      "key": "paymentAmount"
+    },
+    {
+      "label": "Ý kiến phản hồi",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1ik7b0y",
+        "columns": null
+      },
+      "id": "Field_1f5t4ua",
+      "key": "feedback"
+    },
+    {
+      "label": "Đồng ý thanh toán",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_18z6qjj",
+        "columns": null
+      },
+      "id": "Field_1k40vjc",
+      "key": "confirmed"
+    }
+  ],
+  "type": "default",
+  "id": "Form_1ioof15",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}

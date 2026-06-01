@@ -1,0 +1,56 @@
+{
+  "components": [
+    {
+      "label": "Số giờ dạy",
+      "type": "number",
+      "key": "teachingHours",
+      "id": "Field_0qc9m27",
+      "layout": {
+        "row": "Row_07w2ah1"
+      }
+    },
+    {
+      "label": "Lương cứng",
+      "type": "number",
+      "key": "hourlyRate",
+      "id": "Field_0hc2xqg",
+      "layout": {
+        "row": "Row_0kb6oaz"
+      }
+    },
+    {
+      "label": "Phụ cấp",
+      "type": "number",
+      "key": "bonus",
+      "id": "Field_1lufeuy",
+      "layout": {
+        "row": "Row_18rcnoz"
+      }
+    },
+    {
+      "label": "Khấu trừ",
+      "type": "number",
+      "key": "deduction",
+      "id": "Field_0yh2250",
+      "layout": {
+        "row": "Row_0iefi07"
+      }
+    },
+    {
+      "label": "Kết quả đúng?",
+      "type": "checkbox",
+      "key": "isCorrect",
+      "id": "Field_1m7le3r",
+      "layout": {
+        "row": "Row_1vbrscw"
+      }
+    }
+  ],
+  "schemaVersion": 19,
+  "type": "default",
+  "id": "Form_TinhTien",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  }
+}

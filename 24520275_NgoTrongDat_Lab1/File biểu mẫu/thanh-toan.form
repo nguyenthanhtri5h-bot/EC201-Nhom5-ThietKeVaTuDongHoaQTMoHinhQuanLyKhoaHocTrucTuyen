@@ -1,0 +1,64 @@
+{
+  "components": [
+    {
+      "label": "Mã thanh toán",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0716u0a",
+        "columns": null
+      },
+      "id": "Field_03jaumw",
+      "key": "paymentId"
+    },
+    {
+      "label": "Ngân hàng",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_01kl6q8",
+        "columns": null
+      },
+      "id": "Field_07p18wz",
+      "key": "bankName"
+    },
+    {
+      "label": "Số tài khoản",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_076f7v2",
+        "columns": null
+      },
+      "id": "Field_0dypoq0",
+      "key": "bankAccount"
+    },
+    {
+      "label": "Số tiền chuyển",
+      "type": "number",
+      "layout": {
+        "row": "Row_04qwrif",
+        "columns": null
+      },
+      "id": "Field_1l6n7om",
+      "key": "transferAmount"
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Ngày thanh toán",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_1aa0ych",
+        "columns": null
+      },
+      "id": "Field_0mqeblk",
+      "key": "paymentDate"
+    }
+  ],
+  "type": "default",
+  "id": "Form_1hoqzgu",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}
