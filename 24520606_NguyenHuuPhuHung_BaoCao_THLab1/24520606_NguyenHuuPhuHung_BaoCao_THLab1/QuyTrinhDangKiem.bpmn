@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_CourseReview" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.1">
+  <collaboration id="QuyTrinh_Chot_123">
+    <extensionElements />
+    <participant id="Pool_Platform" name="Quy trình Đăng tải và Kiểm duyệt Khóa học" processRef="Process_CourseReview" />
+  </collaboration>
+  <process id="Process_CourseReview" name="Course Publication and Review" isExecutable="true" camunda:historyTimeToLive="30">
+    <laneSet id="LaneSet_1">
+      <lane id="Lane_Instructor" name="Instructor (Giảng viên)">
+        <flowNodeRef>Task_UploadVideo</flowNodeRef>
+        <flowNodeRef>Task_ConfirmSubmit</flowNodeRef>
+        <flowNodeRef>Task_FixCourse</flowNodeRef>
+        <flowNodeRef>Event_18x30bg</flowNodeRef>
+      </lane>
+      <lane id="Lane_Platform" name="Nền tảng (Hệ thống)">
+        <flowNodeRef>Timer_WaitFix</flowNodeRef>
+        <flowNodeRef>EndEvent_1</flowNodeRef>
+        <flowNodeRef>GW_TechCheck</flowNodeRef>
+        <flowNodeRef>Task_SendErrorEmail</flowNodeRef>
+        <flowNodeRef>Task_OpenMarketplace</flowNodeRef>
+        <flowNodeRef>Task_AICheck</flowNodeRef>
+        <flowNodeRef>Task_UpdateApproved</flowNodeRef>
+      </lane>
+      <lane id="Lane_Reviewer" name="Quality Reviewer (Người kiểm duyệt)">
+        <flowNodeRef>Task_SendFeedback</flowNodeRef>
+        <flowNodeRef>GW_PubCheck</flowNodeRef>
+        <flowNodeRef>Task_ManualReview</flowNodeRef>
+      </lane>
+    </laneSet>
+    <userTask id="Task_UploadVideo" name="Upload Video &#38; Tài liệu" camunda:assignee="instructor">
+      <documentation>Giảng viên tải lên video bài giảng và tài liệu khóa học</documentation>
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="courseTitle" label="Tên khóa học" type="string" />
+          <camunda:formField id="videoUrl" label="Đường dẫn Video" type="string" />
+        </camunda:formData>
+      </extensionElements>
+      <incoming>Flow_1lyn9fz</incoming>
+      <outgoing>Flow_Upload_Submit</outgoing>
+    </userTask>
+    <userTask id="Task_ConfirmSubmit" name="Xác nhận Submit (Nộp để xét duyệt)" camunda:assignee="instructor">
+      <documentation>Giảng viên xác nhận và nộp khóa học để hệ thống xét duyệt</documentation>
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="confirmSubmit" label="Xác nhận nộp duyệt?" type="boolean" />
+          <camunda:formField id="courseId" label="Nhập bất kỳ mã nào" type="string" />
+        </camunda:formData>
+      </extensionElements>
+      <incoming>Flow_Upload_Submit</incoming>
+      <outgoing>Flow_Submit_AICheck</outgoing>
+    </userTask>
+    <intermediateCatchEvent id="Timer_WaitFix" name="Chờ Giảng viên sửa (48 giờ)">
+      <documentation>Hệ thống chờ tối đa 48 giờ để giảng viên thực hiện chỉnh sửa</documentation>
+      <incoming>Flow_ErrorEmail_Timer</incoming>
+      <outgoing>Flow_Timer_Fix</outgoing>
+      <timerEventDefinition id="TimerDef_1">
+        <timeDuration xsi:type="tFormalExpression">PT10S</timeDuration>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+    <endEvent id="EndEvent_1" name="Khóa học được xuất bản thành công">
+      <incoming>Flow_Market_End</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_Upload_Submit" sourceRef="Task_UploadVideo" targetRef="Task_ConfirmSubmit" />
+    <sequenceFlow id="Flow_Submit_AICheck" sourceRef="Task_ConfirmSubmit" targetRef="Task_AICheck" />
+    <sequenceFlow id="Flow_AICheck_GW" sourceRef="Task_AICheck" targetRef="GW_TechCheck" />
+    <sequenceFlow id="Flow_GWTech_Fail" name="No" sourceRef="GW_TechCheck" targetRef="Task_SendErrorEmail">
+      <conditionExpression xsi:type="tFormalExpression">${datChuan == false}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_ErrorEmail_Timer" sourceRef="Task_SendErrorEmail" targetRef="Timer_WaitFix" />
+    <sequenceFlow id="Flow_Timer_Fix" sourceRef="Timer_WaitFix" targetRef="Task_FixCourse" />
+    <sequenceFlow id="Flow_ManualReview_GW" sourceRef="Task_ManualReview" targetRef="GW_PubCheck" />
+    <sequenceFlow id="Flow_GWPub_Fail" name="No" sourceRef="GW_PubCheck" targetRef="Task_SendFeedback">
+      <conditionExpression xsi:type="tFormalExpression">${pubCheckPassed == false}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_Feedback_Fix" sourceRef="Task_SendFeedback" targetRef="Task_FixCourse" />
+    <sequenceFlow id="Flow_05khdua" name="Yes" sourceRef="GW_TechCheck" targetRef="Task_ManualReview">
+      <extensionElements />
+      <conditionExpression xsi:type="tFormalExpression">${datChuan == true}</conditionExpression>
+    </sequenceFlow>
+    <userTask id="Task_SendFeedback" name="Gửi Review Feedback cho Giảng viên" camunda:assignee="reviewer">
+      <documentation>Reviewer ghi chi tiết lý do không đạt và hướng dẫn chỉnh sửa cụ thể</documentation>
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="feedbackDetail" label="Chi tiết phản hồi" type="string" />
+          <camunda:formField id="requiredChanges" label="Yêu cầu chỉnh sửa" type="string" />
+          <camunda:formField id="deadline" label="Thời hạn sửa" type="date" />
+        </camunda:formData>
+      </extensionElements>
+      <incoming>Flow_GWPub_Fail</incoming>
+      <outgoing>Flow_Feedback_Fix</outgoing>
+    </userTask>
+    <userTask id="Task_FixCourse" name="Chỉnh sửa theo yêu cầu (Needs Fixes)" camunda:assignee="instructor">
+      <documentation>Giảng viên chỉnh sửa nội dung theo phản hồi từ hệ thống hoặc reviewer</documentation>
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="fixDescription" label="Mô tả chỉnh sửa" type="string" />
+          <camunda:formField id="fixCompleted" label="Đã hoàn thành chỉnh sửa?" type="boolean" />
+        </camunda:formData>
+      </extensionElements>
+      <incoming>Flow_Timer_Fix</incoming>
+      <incoming>Flow_Feedback_Fix</incoming>
+    </userTask>
+    <sequenceFlow id="Flow_0srusdz" name="Yes" sourceRef="GW_PubCheck" targetRef="Task_UpdateApproved">
+      <conditionExpression xsi:type="tFormalExpression">${pubCheckPassed == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_15q2yrh" sourceRef="Task_UpdateApproved" targetRef="Task_OpenMarketplace" />
+    <exclusiveGateway id="GW_TechCheck" name="Đạt chuẩn kỹ thuật cơ bản?">
+      <incoming>Flow_AICheck_GW</incoming>
+      <outgoing>Flow_GWTech_Fail</outgoing>
+      <outgoing>Flow_05khdua</outgoing>
+    </exclusiveGateway>
+    <exclusiveGateway id="GW_PubCheck" name="Đạt tiêu chuẩn xuất bản?">
+      <incoming>Flow_ManualReview_GW</incoming>
+      <outgoing>Flow_GWPub_Fail</outgoing>
+      <outgoing>Flow_0srusdz</outgoing>
+    </exclusiveGateway>
+    <userTask id="Task_ManualReview" name="Kiểm duyệt chuyên môn &#38; Bản quyền">
+      <documentation>Reviewer kiểm tra thủ công: tính chính xác nội dung, vi phạm bản quyền, chính sách nền tảng</documentation>
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="contentQuality" label="Chất lượng nội dung (1-10)" type="long" />
+          <camunda:formField id="copyrightIssue" label="Có vi phạm bản quyền?" type="boolean" />
+          <camunda:formField id="policyCompliance" label="Tuân thủ chính sách?" type="boolean" />
+          <camunda:formField id="reviewNote" label="Ghi chú reviewer" type="string" />
+          <camunda:formField id="pubCheckPassed" label="Duyệt khóa học này?" type="boolean" />
+        </camunda:formData>
+      </extensionElements>
+      <incoming>Flow_05khdua</incoming>
+      <outgoing>Flow_ManualReview_GW</outgoing>
+    </userTask>
+    <userTask id="Task_SendErrorEmail" name="Tự động gửi Email cảnh báo lỗi">
+      <documentation>BOT gửi email thông báo lỗi kỹ thuật kèm Error Log cho giảng viên</documentation>
+      <extensionElements>
+        <camunda:formData>
+          <camunda:formField id="reasonOfError" label="Lý do không đạt kỹ thuật" type="string" />
+        </camunda:formData>
+      </extensionElements>
+      <incoming>Flow_GWTech_Fail</incoming>
+      <outgoing>Flow_ErrorEmail_Timer</outgoing>
+    </userTask>
+    <sequenceFlow id="Flow_Market_End" sourceRef="Task_OpenMarketplace" targetRef="EndEvent_1" />
+    <serviceTask id="Task_OpenMarketplace" name="Mở công hiển thị lên Marketplace" camunda:type="external" camunda:topic="publish-course">
+      <documentation>BOT tự động public khóa học lên Marketplace cho học viên tìm kiếm</documentation>
+      <incoming>Flow_15q2yrh</incoming>
+      <outgoing>Flow_Market_End</outgoing>
+    </serviceTask>
+    <serviceTask id="Task_AICheck" name="Hệ thống AI quét kỹ thuật (Video/Audio)" camunda:type="external" camunda:topic="ai-check">
+      <documentation>BOT tự động kiểm tra định dạng file, độ phân giải video, chất lượng âm thanh</documentation>
+      <incoming>Flow_Submit_AICheck</incoming>
+      <outgoing>Flow_AICheck_GW</outgoing>
+    </serviceTask>
+    <task id="Task_UpdateApproved" name="Cập nhật Data: Trạng thái Approved">
+      <documentation>BOT cập nhật trạng thái khóa học thành Approved trong Udemy Course Database</documentation>
+      <extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="status">APPROVED</camunda:inputParameter>
+          <camunda:inputParameter name="courseId">${courseId}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </extensionElements>
+      <incoming>Flow_0srusdz</incoming>
+      <outgoing>Flow_15q2yrh</outgoing>
+    </task>
+    <startEvent id="Event_18x30bg" name="Bắt đầu nộp khóa học">
+      <outgoing>Flow_1lyn9fz</outgoing>
+    </startEvent>
+    <sequenceFlow id="Flow_1lyn9fz" sourceRef="Event_18x30bg" targetRef="Task_UploadVideo" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="QuyTrinh_Chot_123">
+      <bpmndi:BPMNShape id="Pool_Platform_di" bpmnElement="Pool_Platform" isHorizontal="true">
+        <dc:Bounds x="120" y="80" width="1300" height="620" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Reviewer_di" bpmnElement="Lane_Reviewer" isHorizontal="true">
+        <dc:Bounds x="150" y="460" width="1270" height="240" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Platform_di" bpmnElement="Lane_Platform" isHorizontal="true">
+        <dc:Bounds x="150" y="260" width="1270" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Instructor_di" bpmnElement="Lane_Instructor" isHorizontal="true">
+        <dc:Bounds x="150" y="80" width="1270" height="180" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_UploadVideo_di" bpmnElement="Task_UploadVideo">
+        <dc:Bounds x="300" y="130" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConfirmSubmit_di" bpmnElement="Task_ConfirmSubmit">
+        <dc:Bounds x="490" y="130" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Timer_WaitFix_di" bpmnElement="Timer_WaitFix">
+        <dc:Bounds x="1222" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1200" y="385" width="80" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="212" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="188" y="385" width="85" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SendFeedback_di" bpmnElement="Task_SendFeedback">
+        <dc:Bounds x="1060" y="560" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_FixCourse_di" bpmnElement="Task_FixCourse">
+        <dc:Bounds x="1060" y="130" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_TechCheck_di" bpmnElement="GW_TechCheck" isMarkerVisible="true">
+        <dc:Bounds x="865" y="335" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="856" y="298" width="68" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_PubCheck_di" bpmnElement="GW_PubCheck" isMarkerVisible="true">
+        <dc:Bounds x="865" y="575" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="854" y="635" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1t1vaxg_di" bpmnElement="Task_ManualReview">
+        <dc:Bounds x="840" y="480" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1drgxmj_di" bpmnElement="Task_SendErrorEmail">
+        <dc:Bounds x="970" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0so1q9q_di" bpmnElement="Task_OpenMarketplace">
+        <dc:Bounds x="300" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_141x0sa_di" bpmnElement="Task_AICheck">
+        <dc:Bounds x="670" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0xt9vqk_di" bpmnElement="Task_UpdateApproved">
+        <dc:Bounds x="490" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18x30bg_di" bpmnElement="Event_18x30bg">
+        <dc:Bounds x="212" y="152" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="187" y="195" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_Upload_Submit_di" bpmnElement="Flow_Upload_Submit">
+        <di:waypoint x="440" y="170" />
+        <di:waypoint x="490" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Submit_AICheck_di" bpmnElement="Flow_Submit_AICheck">
+        <di:waypoint x="630" y="170" />
+        <di:waypoint x="650" y="170" />
+        <di:waypoint x="650" y="360" />
+        <di:waypoint x="670" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_AICheck_GW_di" bpmnElement="Flow_AICheck_GW">
+        <di:waypoint x="770" y="360" />
+        <di:waypoint x="865" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GWTech_Fail_di" bpmnElement="Flow_GWTech_Fail">
+        <di:waypoint x="915" y="360" />
+        <di:waypoint x="970" y="360" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="924" y="338" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ErrorEmail_Timer_di" bpmnElement="Flow_ErrorEmail_Timer">
+        <di:waypoint x="1070" y="360" />
+        <di:waypoint x="1222" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Timer_Fix_di" bpmnElement="Flow_Timer_Fix">
+        <di:waypoint x="1240" y="342" />
+        <di:waypoint x="1240" y="170" />
+        <di:waypoint x="1200" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ManualReview_GW_di" bpmnElement="Flow_ManualReview_GW">
+        <di:waypoint x="890" y="560" />
+        <di:waypoint x="890" y="575" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_GWPub_Fail_di" bpmnElement="Flow_GWPub_Fail">
+        <di:waypoint x="915" y="600" />
+        <di:waypoint x="1060" y="600" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="981" y="613" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Feedback_Fix_di" bpmnElement="Flow_Feedback_Fix">
+        <di:waypoint x="1130" y="560" />
+        <di:waypoint x="1130" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05khdua_di" bpmnElement="Flow_05khdua">
+        <di:waypoint x="890" y="385" />
+        <di:waypoint x="890" y="480" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="861" y="423" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0srusdz_di" bpmnElement="Flow_0srusdz">
+        <di:waypoint x="865" y="600" />
+        <di:waypoint x="560" y="600" />
+        <di:waypoint x="560" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="704" y="582" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15q2yrh_di" bpmnElement="Flow_15q2yrh">
+        <di:waypoint x="490" y="360" />
+        <di:waypoint x="400" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_Market_End_di" bpmnElement="Flow_Market_End">
+        <di:waypoint x="300" y="360" />
+        <di:waypoint x="248" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lyn9fz_di" bpmnElement="Flow_1lyn9fz">
+        <di:waypoint x="248" y="170" />
+        <di:waypoint x="300" y="170" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
