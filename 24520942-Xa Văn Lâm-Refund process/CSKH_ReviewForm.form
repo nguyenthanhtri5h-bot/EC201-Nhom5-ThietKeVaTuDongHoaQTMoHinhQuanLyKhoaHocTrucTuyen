@@ -1,0 +1,104 @@
+{
+  "components": [
+    {
+      "label": "Họ tên học viên",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_00ksuva",
+        "columns": null
+      },
+      "id": "Field_0t12ivc",
+      "key": "studentName",
+      "readonly": true,
+      "disabled": true
+    },
+    {
+      "label": "Email nhận thông báo",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1q8fpps",
+        "columns": null
+      },
+      "id": "Field_13kb8of",
+      "key": "studentEmail",
+      "disabled": true,
+      "validate": {
+        "required": true,
+        "validationType": "email"
+      }
+    },
+    {
+      "label": "Mã khóa học",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1q8fpps",
+        "columns": null
+      },
+      "id": "Field_0dtbjia",
+      "key": "courseId",
+      "disabled": true
+    },
+    {
+      "label": "Số tiền yêu cầu",
+      "type": "number",
+      "layout": {
+        "row": "Row_0uvi01h",
+        "columns": null
+      },
+      "id": "Field_1lzpp75",
+      "key": "amount",
+      "disabled": true
+    },
+    {
+      "label": "Lý do học viên xin hoàn",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_07tn43h",
+        "columns": null
+      },
+      "id": "Field_06v9h8p",
+      "key": "refundReason",
+      "disabled": true
+    },
+    {
+      "label": "Kết quả kiểm tra hồ sơ",
+      "values": [
+        {
+          "label": "Hợp lệ",
+          "value": "true"
+        },
+        {
+          "label": "Không hợp lệ",
+          "value": "false"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0c8xl2c",
+        "columns": null
+      },
+      "id": "Field_0a3243i",
+      "key": "isEligible",
+      "defaultValue": "true"
+    },
+    {
+      "label": "Ghi chú của CSKH",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_0aanfzh",
+        "columns": null
+      },
+      "id": "Field_10qazk7",
+      "key": "cskhNote"
+    }
+  ],
+  "type": "default",
+  "id": "CSKH_ReviewForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.24.0",
+  "schemaVersion": 19
+}
